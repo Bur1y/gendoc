@@ -13,7 +13,7 @@ module com.nrtk.bur1y.gendoc {
     requires org.apache.poi.ooxml.schemas;
     requires odfdom.java;
     requires simple.odf;
-
+    requires com.aspose.words;
 
     opens com.nrtk.bur1y.gendoc to javafx.fxml;
     opens com.nrtk.bur1y.gendoc.Controllers;

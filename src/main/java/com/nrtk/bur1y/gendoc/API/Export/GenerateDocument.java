@@ -1,5 +1,6 @@
 package com.nrtk.bur1y.gendoc.API.Export;
 
+import com.aspose.words.Document;
 import com.nrtk.bur1y.gendoc.API.Import.GetGroups;
 import com.nrtk.bur1y.gendoc.Controllers.Alerts;
 import com.nrtk.bur1y.gendoc.Data.Commission;
@@ -57,7 +58,7 @@ public class GenerateDocument {
             c = row.getCellByIndex(2);
             c.setStringValue("%idRecord%");
             c = row.getCellByIndex(3);
-            c.setStringValue("освоен с оценкой %total%");
+            c.setStringValue("%total%");
 
             row = t.appendRow();
         }
@@ -65,9 +66,10 @@ public class GenerateDocument {
 
         try {
             if (extension.equals(".odt")) {
-//            textdoc.save("toOdt");
-//            Document doc = new Document("toOdt");
-//            doc.save(sGroup.name + " Протокол от " + localDate + ".odt");
+                textdoc.save("toOdt");
+            Document doc = new Document("toOdt");
+            doc.save(whereSave() + "/" + sGroup.name + " Ведомость от " + localDate + ".odt");
+                Alerts.infoAlert("Документ был успешно сохранён", "Завершение операции", "Успешно");
             } else {
                 textdoc.save(whereSave() + "/" + sGroup.name + " Ведомость от " + localDate + extension);
                 Alerts.infoAlert("Документ был успешно сохранён", "Завершение операции", "Успешно");
@@ -101,7 +103,6 @@ public class GenerateDocument {
         int i = 1;
 
         for (Student s : sGroup.studentList) {
-            System.out.printf("Номер строки - " + i + " ");
             replace("%idRecord%", textdoc, String.valueOf(s.idRecord));
             replace("%fio%", textdoc, s.fio);
             replace("%id%", textdoc, String.valueOf(i));
@@ -139,15 +140,23 @@ public class GenerateDocument {
                 c = row.getCellByIndex(j);
                 c.setStringValue("+");
             }
+            c = row.getCellByIndex(17);
+            c.setStringValue("%total%");
+            c = row.getCellByIndex(18);
+            c.setStringValue("%total%");
+
             row = t.appendRow();
+
         }
         t.removeRowsByIndex(i + 1, i);
 
         try {
             if (extension.equals(".odt")) {
-//            textdoc.save("toOdt.tmp");
-//            Document doc = new Document("toOdt");
-//            doc.save(sGroup.name + " Протокол от " + localDate + ".odt");
+                textdoc.save("toOdt");
+                Document doc = new Document("toOdt");
+                doc.save(whereSave() + "/" + sGroup.name + " Протокол от " + localDate + ".odt");
+                Alerts.infoAlert("Документ был успешно сохранён", "Завершение операции", "Успешно");
+
             } else {
                 textdoc.save(whereSave() + "/" + sGroup.name + " Протокол от " + localDate + extension);
                 Alerts.infoAlert("Документ был успешно сохранён", "Завершение операции", "Успешно");
@@ -160,7 +169,7 @@ public class GenerateDocument {
 
     public static String getMark(Integer mark) {
 
-        return String.valueOf(mark +
+        return String.valueOf("освоен с оценкой " + mark +
                 switch (mark) {
 
                     case 5 -> " (отлично)";
